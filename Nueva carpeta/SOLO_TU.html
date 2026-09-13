@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una Sorpresa Para Ti</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #EBBEE8;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* --- PANTALLA 1: LOGIN --- */
+        #pantalla-login {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .corazon-confeti {
+            position: absolute;
+            top: -50px;
+            pointer-events: none;
+            z-index: 1;
+            animation: caer linear infinite;
+        }
+
+        @keyframes caer {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0.2;
+            }
+        }
+
+        .corazon-wrapper {
+            position: relative;
+            width: 432px;
+            height: 396px;
+            filter: drop-shadow(0px 12px 18px rgba(0, 0, 0, 0.18));
+            z-index: 10;
+        }
+
+        .corazon-container {
+            width: 100%;
+            height: 100%;
+            background-color: #CE9EE6;
+            clip-path: path('M 216 384 C 216 384 12 252 12 132 C 12 54 72 12 144 12 C 186 12 210 36 216 54 C 222 36 246 12 288 12 C 360 12 420 54 420 132 C 420 252 216 384 216 384 Z');
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .contenido {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 18px;
+        }
+
+        h2 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 18px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .inputs-clave {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .inputs-clave input {
+            width: 38px;
+            height: 50px;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+            border: 2px solid #ffffff;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .inputs-clave input:focus {
+            border-color: #ff4b72;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-ingresar {
+            background-color: #ffffff;
+            color: #ff4b72;
+            border: none;
+            padding: 10px 26px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: background-color 0.2s;
+        }
+
+        .btn-ingresar:hover {
+            background-color: #fff0f3;
+        }
+
+        .mensaje-error {
+            color: #ffffff;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            font-weight: bold;
+            height: 18px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* --- PANTALLA 2: SORPRESA CON FONDO DE PAPEL ARRUGADO --- */
+        #pantalla-sorpresa {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100vw;
+            min-height: 100vh;
+            padding: 40px 20px 100px 20px;
+            position: relative;
+            z-index: 20;
+            background-color: #EBBEE8;
+            background-image: url('papel.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-blend-mode: multiply;
+        }
+
+        .contenedor-principal {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .titulo-diamantina {
+            font-size: 2.3rem;
+            font-style: italic;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #FF4765;
+            background: radial-gradient(circle, #fff 10%, transparent 20%),
+                        radial-gradient(circle, #FF4765 20%, transparent 20%),
+                        linear-gradient(45deg, #FF4765, #ff859b, #FF4765);
+            background-size: 6px 6px, 8px 8px, 100% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.15));
+        }
+
+        .timbres-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .timbre-card {
+            background-color: #ffffff;
+            width: 270px;
+            padding: 16px;
+            text-decoration: none;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+            position: relative;
+            border: 12px solid #FF4765;
+            outline: 2px dashed #ffffff;
+            outline-offset: -8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .timbre-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+        }
+
+        .imagen-frame {
+            width: 100%;
+            height: 270px;
+            background-color: #f7f7f7;
+            border: 1px dashed #FF4765;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .imagen-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .timbre-texto {
+            font-size: 1rem;
+            font-weight: bold;
+            font-style: normal;
+            text-align: center;
+            color: #4a4a4a;
+            margin-top: 5px;
+        }
+
+        /* --- BOTÓN REGRESAR --- */
+        .btn-regresar-wrapper {
+            position: fixed;
+            bottom: 20px;
+            left: 25px;
+            width: 110px;
+            height: 100px;
+            filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.15));
+            z-index: 30;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-regresar-wrapper:hover {
+            transform: scale(1.08);
+        }
+
+        .corazon-regresar-container {
+            width: 100%;
+            height: 100%;
+            background-color: #CE9EE6;
+            clip-path: path('M 55 98 C 55 98 3 64 3 34 C 3 14 18 3 37 3 C 48 3 54 9 55 14 C 57 9 63 3 74 3 C 92 3 107 14 107 34 C 107 64 55 98 55 98 Z');
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .contenido-regresar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-top: -5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .contenido-regresar svg {
+            fill: white;
+            width: 22px;
+            height: 22px;
+            margin-bottom: 2px;
+        }
+
+        .contenido-regresar span {
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA 1: LOGIN -->
+    <div id="pantalla-login">
+        <div class="corazon-wrapper">
+            <div class="corazon-container">
+                <div class="contenido">
+                    <h2>Ingresa la contraseña</h2>
+                    <div class="inputs-clave">
+                        <input type="text" maxlength="1" class="codigo-input" autofocus>
+                        <input type="text" maxlength="1" class="codigo-input">
+                        <input type="text" maxlength="1" class="codigo-input">
+                        <input type="text" maxlength="1" class="codigo-input">
+                        <input type="text" maxlength="1" class="codigo-input">
+                        <input type="text" maxlength="1" class="codigo-input">
+                    </div>
+                    <button class="btn-ingresar" onclick="verificarCodigo()">Entrar</button>
+                    <div class="mensaje-error" id="error"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 2: SORPRESA -->
+    <div id="pantalla-sorpresa">
+        <div class="contenedor-principal">
+            <h1 class="titulo-diamantina">¿Te atreves a seguir siendo el amor de mi vida?</h1>
+
+            <div class="timbres-container">
+                <a href="opcion1.html" class="timbre-card">
+                    <div class="imagen-frame">
+                        <img src="foto1.jpg" alt="¿Por qué me enamoré de ti?">
+                    </div>
+                    <div class="timbre-texto">1. ¿Por qué me enamoré de ti?</div>
+                </a>
+
+                <a href="opcion2.html" class="timbre-card">
+                    <div class="imagen-frame">
+                        <img src="foto2.jpg" alt="¿Por qué te sigo queriendo?">
+                    </div>
+                    <div class="timbre-texto">2. ¿Por qué te sigo queriendo?</div>
+                </a>
+
+                <a href="opcion3.html" class="timbre-card">
+                    <div class="imagen-frame">
+                        <img src="foto3.jpg" alt="Prometo seguir contigo">
+                    </div>
+                    <div class="timbre-texto">3. Prometo seguir contigo</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Botón de regreso -->
+        <div class="btn-regresar-wrapper" onclick="regresarAlLogin()">
+            <div class="corazon-regresar-container">
+                <div class="contenido-regresar">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                    <span>Regresar</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CLAVE_CORRECTA = "261121"; 
+
+        const inputs = document.querySelectorAll('.codigo-input');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('keyup', (e) => {
+                if (e.key >= 0 && e.key <= 9 || e.key.length === 1) {
+                    if (index < inputs.length - 1 && input.value !== '') {
+                        inputs[index + 1].focus();
+                    }
+                } else if (e.key === 'Backspace') {
+                    if (index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                }
+            });
+        });
+
+        let intervaloCorazones;
+
+        function verificarCodigo() {
+            let codigoIngresado = "";
+            inputs.forEach(input => codigoIngresado += input.value);
+
+            if (codigoIngresado === CLAVE_CORRECTA) {
+                document.getElementById('pantalla-login').style.display = 'none';
+                document.getElementById('pantalla-sorpresa').style.display = 'flex';
+                
+                clearInterval(intervaloCorazones);
+            } else {
+                document.getElementById('error').innerText = "Contraseña incorrecta ❤️‍🩹";
+                inputs.forEach(input => input.value = "");
+                inputs[0].focus();
+            }
+        }
+
+        function regresarAlLogin() {
+            document.getElementById('pantalla-sorpresa').style.display = 'none';
+            document.getElementById('pantalla-login').style.display = 'flex';
+            
+            inputs.forEach(input => input.value = "");
+            document.getElementById('error').innerText = "";
+            inputs[0].focus();
+
+            intervaloCorazones = setInterval(crearCorazonConfeti, 100);
+        }
+
+        // Lluvia de corazones
+        const coloresCorazones = ['#BD9EE6', '#A69EE6', '#E69ECA', '#E69EA9'];
+
+        function crearCorazonConfeti() {
+            const corazon = document.createElement('div');
+            corazon.classList.add('corazon-confeti');
+            
+            const colorAleatorio = coloresCorazones[Math.floor(Math.random() * coloresCorazones.length)];
+            const tamano = Math.random() * 15 + 15;
+            
+            corazon.innerHTML = `
+                <svg width="${tamano}" height="${tamano}" viewBox="0 0 24 24" fill="${colorAleatorio}">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            `;
+
+            corazon.style.left = Math.random() * 100 + 'vw';
+            const duracion = Math.random() * 3 + 2.5;
+            corazon.style.animationDuration = duracion + 's';
+
+            document.body.appendChild(corazon);
+
+            setTimeout(() => {
+                corazon.remove();
+            }, duracion * 1000);
+        }
+
+        intervaloCorazones = setInterval(crearCorazonConfeti, 100);
+    </script>
+</body>
+</html>
